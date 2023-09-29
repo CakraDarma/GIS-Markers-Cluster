@@ -13,6 +13,17 @@ const Map = () => {
   const [geolocation, setGeolocation] = useState<LatLngExpression | null>(null)
   const markerRef = useRef<any>(null)
 
+  const arrCoordinates = [
+    {
+      lat: -8.639152628370512,
+      lng: 115.19347429275514,
+    },
+    {
+      lat: -8.613985,
+      lng: 115.137829,
+    },
+  ]
+
   const eventHandler = useMemo(
     () => ({
       dragend() {
@@ -68,15 +79,20 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker
-        icon={myIcon}
-        ref={markerRef}
-        position={geolocation}
-        draggable={true}
-        eventHandlers={eventHandler}
-      >
-        <Popup>Cakra Home.</Popup>
-      </Marker>
+      {arrCoordinates.map((coordinata, index) => {
+        return (
+          <Marker
+            key={index}
+            icon={myIcon}
+            ref={markerRef}
+            position={coordinata}
+            draggable={true}
+            eventHandlers={eventHandler}
+          >
+            <Popup>Cakra Home.</Popup>
+          </Marker>
+        )
+      })}
 
       <RecenterMap location={geolocation} />
     </MapContainer>

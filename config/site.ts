@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Gung Cakra GIS Project",
+  name: "Cakra GIS Project",
   description:
     "My weekly campus GIS tasks involve hands-on learning and practical exercises to gain proficiency in geographic information systems.",
   mainNav: [
@@ -11,6 +11,6 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/shadcn/ui",
+    github: "https://github.com/CakraDarma",
   },
 }

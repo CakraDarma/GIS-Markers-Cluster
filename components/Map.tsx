@@ -1,8 +1,15 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import axios from "axios"
 import { LatLngExpression } from "leaflet"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet"
 
 import "leaflet/dist/leaflet.css"
 import RecenterMap from "@/components/RecenterMap"
@@ -10,19 +17,52 @@ import { myIcon } from "@/utils/Icon"
 
 const Map = () => {
   // api web
-  const [geolocation, setGeolocation] = useState<LatLngExpression | null>(null)
+  const [geolocation, setGeolocation] = useState<any>([])
+  // const [geolocation, setGeolocation] = useState<LatLngExpression | null>(null)
   const markerRef = useRef<any>(null)
 
-  const arrCoordinates = [
-    {
-      lat: -8.639152628370512,
-      lng: 115.19347429275514,
-    },
-    {
-      lat: -8.613985,
-      lng: 115.137829,
-    },
-  ]
+  function MultipleMarkers() {
+    const map = useMapEvents({
+      click: async (e) => {
+        const { lat, lng } = e.latlng
+        const response = await axios.get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+        )
+
+        if (response.data.locality) {
+          const kecamatan = response.data.locality
+          const kabupaten = response.data.city
+          const provinsi = response.data.principalSubdivision
+          const locationData = {
+            lat,
+            lng,
+            kecamatan,
+            kabupaten,
+            provinsi,
+          }
+          setGeolocation((prevState: any) => [...prevState, locationData])
+        }
+      },
+    })
+    return geolocation.map((coordinata: any, index: number) => {
+      return (
+        <Marker
+          key={index}
+          icon={myIcon}
+          // ref={markerRef}
+          position={coordinata}
+          draggable={true}
+          eventHandlers={eventHandler}
+        >
+          <Popup>
+            <h1>{`Provinsi: ${coordinata.provinsi}`}</h1>
+            <h1>{`Provinsi: ${coordinata.kabupaten}`}</h1>
+            <h1>{`Provinsi: ${coordinata.kecamatan}`}</h1>
+          </Popup>
+        </Marker>
+      )
+    })
+  }
 
   const eventHandler = useMemo(
     () => ({
@@ -37,37 +77,9 @@ const Map = () => {
     }),
     []
   )
-
-  useEffect(() => {
-    setGeolocation({
-      lat: -8.639152628370512,
-      lng: 115.19347429275514,
-    })
-  }, [])
-
-  // useEffect(() => {
-  // 	if ('geolocation' in navigator) {
-  // 		navigator.geolocation.getCurrentPosition(function (position) {
-  // 			setGeolocation({
-  // 				lat: position.coords.latitude,
-  // 				lng: position.coords.longitude,
-  // 			});
-  // 		});
-  // 	} else {
-  // 		console.log('Your device is not available geolocation');
-  // 	}
-  // }, []);
-
-  if (!geolocation) {
-    return (
-      <div>
-        <h1>Upp Something Wrong...</h1>
-      </div>
-    )
-  }
   return (
     <MapContainer
-      center={geolocation}
+      center={[-8.6828693, 115.2004822]}
       zoom={13}
       scrollWheelZoom={true}
       style={{
@@ -79,22 +91,8 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {arrCoordinates.map((coordinata, index) => {
-        return (
-          <Marker
-            key={index}
-            icon={myIcon}
-            ref={markerRef}
-            position={coordinata}
-            draggable={true}
-            eventHandlers={eventHandler}
-          >
-            <Popup>Cakra Home.</Popup>
-          </Marker>
-        )
-      })}
-
-      <RecenterMap location={geolocation} />
+      <MultipleMarkers />
+      <RecenterMap location={[-8.6828693, 115.2004822]} />
     </MapContainer>
   )
 }

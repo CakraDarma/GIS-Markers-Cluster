@@ -10,6 +10,7 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet"
+import { MarkerMuster } from "react-leaflet-muster"
 
 import "leaflet/dist/leaflet.css"
 import RecenterMap from "@/components/RecenterMap"
@@ -44,47 +45,74 @@ const Map = () => {
         }
       },
     })
-    return geolocation.map((coordinata: any, index: number) => {
-      return (
-        <Marker
-          key={index}
-          icon={myIcon}
-          // ref={markerRef}
-          position={coordinata}
-          draggable={true}
-          eventHandlers={eventHandler}
-        >
-          <Popup>
-            <h1>{`Provinsi: ${coordinata.provinsi}`}</h1>
-            <h1>{`Provinsi: ${coordinata.kabupaten}`}</h1>
-            <h1>{`Provinsi: ${coordinata.kecamatan}`}</h1>
-          </Popup>
-        </Marker>
-      )
-    })
+    return (
+      <MarkerMuster>
+        {geolocation.map((coordinata: any, index: number) => {
+          return (
+            <Marker
+              key={index}
+              icon={myIcon}
+              // ref={markerRef}
+              position={coordinata}
+              // draggable={true}
+              // eventHandlers={eventHandler}
+            >
+              <Popup>
+                <h1>{`Provinsi: ${coordinata.provinsi}`}</h1>
+                <h1>{`Kabupaten: ${coordinata.kabupaten}`}</h1>
+                <h1>{`Kecamatan: ${coordinata.kecamatan}`}</h1>
+              </Popup>
+            </Marker>
+          )
+        })}
+      </MarkerMuster>
+    )
   }
 
-  const eventHandler = useMemo(
-    () => ({
-      dragend() {
-        const marker = markerRef.current
+  // const eventHandler = useMemo(
+  //   () => ({
+  //     dragend() {
+  //       const marker = markerRef.current
 
-        if (marker) {
-          const position = marker.getLatLng()
-          setGeolocation(position)
-        }
-      },
-    }),
-    []
-  )
+  //       if (marker) {
+  //         console.log(marker)
+  //         // const position = marker.getLatLng()
+  //         // setGeolocation(position)
+  //       }
+  //     },
+  //   }),
+  //   []
+  // )
+
+  type lastLocationData = {
+    lat: number
+    lng: number
+    kecamatan: string
+    kabupaten: string
+    provinsi: string
+  }
+  let lastLocation: lastLocationData = geolocation[geolocation.length - 1]
+  let lat: number
+  let lng: number
+  if (lastLocation) {
+    lat = lastLocation.lat
+    lng = lastLocation.lng
+  } else {
+    lat = -8.6828693
+    lng = 115.2004822
+  }
+
+  console.log(geolocation)
+
   return (
     <MapContainer
       center={[-8.6828693, 115.2004822]}
       zoom={13}
+      ref={markerRef}
       scrollWheelZoom={true}
       style={{
-        height: "100vh",
-        width: "100vw",
+        height: "70vh",
+        width: "100%",
       }}
     >
       <TileLayer
@@ -92,7 +120,7 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MultipleMarkers />
-      <RecenterMap location={[-8.6828693, 115.2004822]} />
+      <RecenterMap location={[lat, lng]} />
     </MapContainer>
   )
 }

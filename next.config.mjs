@@ -5,6 +5,6 @@ const nextConfig = {
     appDir: true,
   },
   distDir: "build",
-  output: "export",
+  // output: "export",
 }
 export default nextConfig

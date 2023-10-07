@@ -1,21 +1,8 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import axios from "axios"
-import { LatLngExpression } from "leaflet"
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet"
-import { MarkerMuster } from "react-leaflet-muster"
+import { MapContainer, TileLayer } from "react-leaflet"
 
 import "leaflet/dist/leaflet.css"
-import RecenterMap from "@/components/RecenterMap"
-import { myIcon } from "@/utils/Icon"
-
 import MarkerMap from "./Marker"
 
 const Map = () => {

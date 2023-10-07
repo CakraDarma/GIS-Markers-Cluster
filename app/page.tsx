@@ -11,8 +11,7 @@ export default function IndexPage() {
           Multiple Markers
         </h1>
         <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-          Leaflet: Recenter last marker, multiple markers, added location
-          tracking feature.
+          Leaflet: clustering multiple markers, added location tracking feature.
         </p>
       </div>
       <div className="flex gap-4">

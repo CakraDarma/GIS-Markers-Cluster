@@ -9,12 +9,13 @@ import "leaflet/dist/leaflet.css"
 import { myIcon } from "@/utils/Icon"
 
 const MarkerMap = () => {
-  const handleDeleteMarker = (e: any, index: any) => {
-    e.preventDefault() // Mencegah perilaku default klik kanan
-    console.log("cakra")
+  const [geolocation, setGeolocation] = useState<any>([])
+
+  const deleteMarkerPosition = (index: any, e: any) => {
     const updatedLocationData = [...geolocation]
     updatedLocationData.splice(index, 1)
     setGeolocation(updatedLocationData)
+    // makeapi()
   }
 
   const updateMarkerPosition = async (index: any, newPosition: any) => {
@@ -24,7 +25,6 @@ const MarkerMap = () => {
       )
 
       if (response.data.locality) {
-        const newLocationName = response.data.locality
         const updatedLocationData = [...geolocation]
         const kecamatan = response.data.locality
         const kabupaten = response.data.city
@@ -36,16 +36,14 @@ const MarkerMap = () => {
           kecamatan,
           kabupaten,
           provinsi,
-          locationName: newLocationName,
         }
         setGeolocation(updatedLocationData)
-        console.log(geolocation)
       }
     } catch (error) {
       console.error("Error fetching location data", error)
     }
   }
-  const [geolocation, setGeolocation] = useState<any>([])
+
   useMapEvents({
     click: async (e) => {
       const { lat, lng } = e.latlng
@@ -65,6 +63,14 @@ const MarkerMap = () => {
           provinsi,
         }
         setGeolocation((prevState: any) => [...prevState, locationData])
+        const payload: any = {
+          lat,
+          lng,
+          kecamatan,
+          kabupaten,
+          provinsi,
+        }
+        await axios.post("/api/marker", payload)
       }
     },
   })
@@ -80,18 +86,13 @@ const MarkerMap = () => {
             draggable={true}
             eventHandlers={{
               dragend: (e) => updateMarkerPosition(index, e.target.getLatLng()),
+              contextmenu: (e) => deleteMarkerPosition(index, e),
             }}
           >
             <Popup>
-              <h1>{`Provinsi: ${coordinata.provinsi}`}</h1>
-              <h1>{`Kabupaten: ${coordinata.kabupaten}`}</h1>
-              <h1>{`Kecamatan: ${coordinata.kecamatan}`}</h1>
-              <div
-                className="cursor-pointer"
-                onContextMenu={(e) => handleDeleteMarker(e, index)}
-              >
-                Delete
-              </div>
+              <h1>{`${coordinata.provinsi}`}</h1>
+              <h1>{` ${coordinata.kabupaten}`}</h1>
+              <h1>{` ${coordinata.kecamatan}`}</h1>
             </Popup>
           </Marker>
         )

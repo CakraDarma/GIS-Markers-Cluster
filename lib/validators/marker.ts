@@ -6,4 +6,5 @@ export const MarkerValidator = z.object({
   kecamatan: z.string(),
   kabupaten: z.string(),
   provinsi: z.string(),
+  id: z.string().optional(),
 })

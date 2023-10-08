@@ -43,10 +43,9 @@ export async function GET() {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json()
-    const { lat, lng, kecamatan, kabupaten, provinsi, id } =
+    const { id, lat, lng, kecamatan, kabupaten, provinsi } =
       MarkerValidator.parse(body)
 
-    // update username
     await db.marker.update({
       where: {
         id,

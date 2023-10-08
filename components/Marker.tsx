@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import { Marker, Popup, useMapEvents } from "react-leaflet"
 import { MarkerMuster } from "react-leaflet-muster"
@@ -10,12 +10,34 @@ import { myIcon } from "@/utils/Icon"
 
 const MarkerMap = () => {
   const [geolocation, setGeolocation] = useState<any>([])
+  const [loading, setLoading] = useState(false)
 
-  const deleteMarkerPosition = (index: any, e: any) => {
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    try {
+      setLoading(true)
+      const response = await axios.get("/api/marker")
+      const data = response.data
+      setGeolocation(data)
+    } catch (error) {
+      console.log(error)
+    }
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  const deleteMarkerPosition = async (index: any, e: any) => {
     const updatedLocationData = [...geolocation]
+    const id = updatedLocationData[index].id
+    const payload: any = {
+      id,
+    }
+    await axios.delete("/api/marker", { data: payload })
     updatedLocationData.splice(index, 1)
     setGeolocation(updatedLocationData)
-    // makeapi()
   }
 
   const updateMarkerPosition = async (index: any, newPosition: any) => {
@@ -31,18 +53,22 @@ const MarkerMap = () => {
         const provinsi = response.data.principalSubdivision
         updatedLocationData[index] = {
           ...updatedLocationData[index],
-          lat: newPosition.lat,
-          lng: newPosition.lng,
+          lat: parseFloat(newPosition.lat),
+          lng: parseFloat(newPosition.lng),
           kecamatan,
           kabupaten,
           provinsi,
         }
         setGeolocation(updatedLocationData)
+
+        await axios.patch("/api/marker", updatedLocationData[index])
       }
     } catch (error) {
       console.error("Error fetching location data", error)
     }
   }
+
+  // tidak punya id
 
   useMapEvents({
     click: async (e) => {
@@ -62,42 +88,42 @@ const MarkerMap = () => {
           kabupaten,
           provinsi,
         }
-        setGeolocation((prevState: any) => [...prevState, locationData])
-        const payload: any = {
-          lat,
-          lng,
-          kecamatan,
-          kabupaten,
-          provinsi,
-        }
-        await axios.post("/api/marker", payload)
+        await axios.post("/api/marker", locationData)
+        fetchData()
       }
     },
   })
 
   return (
-    <MarkerMuster>
-      {geolocation.map((coordinata: any, index: number) => {
-        return (
-          <Marker
-            key={index}
-            icon={myIcon}
-            position={coordinata}
-            draggable={true}
-            eventHandlers={{
-              dragend: (e) => updateMarkerPosition(index, e.target.getLatLng()),
-              contextmenu: (e) => deleteMarkerPosition(index, e),
-            }}
-          >
-            <Popup>
-              <h1>{`${coordinata.provinsi}`}</h1>
-              <h1>{` ${coordinata.kabupaten}`}</h1>
-              <h1>{` ${coordinata.kecamatan}`}</h1>
-            </Popup>
-          </Marker>
-        )
-      })}
-    </MarkerMuster>
+    <div>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <MarkerMuster>
+          {geolocation.map((coordinata: any, index: number) => {
+            return (
+              <Marker
+                key={index}
+                icon={myIcon}
+                position={coordinata}
+                draggable={true}
+                eventHandlers={{
+                  dragend: (e) =>
+                    updateMarkerPosition(index, e.target.getLatLng()),
+                  contextmenu: (e) => deleteMarkerPosition(index, e),
+                }}
+              >
+                <Popup>
+                  <h1>{`${coordinata.provinsi}`}</h1>
+                  <h1>{` ${coordinata.kabupaten}`}</h1>
+                  <h1>{` ${coordinata.kecamatan}`}</h1>
+                </Popup>
+              </Marker>
+            )
+          })}
+        </MarkerMuster>
+      )}
+    </div>
   )
 }
 

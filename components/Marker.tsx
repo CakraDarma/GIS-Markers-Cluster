@@ -8,8 +8,17 @@ import { MarkerMuster } from "react-leaflet-muster"
 import "leaflet/dist/leaflet.css"
 import { myIcon } from "@/utils/Icon"
 
+interface Marker {
+  id: string
+  lat: number
+  lng: number
+  kecamatan: string
+  kabupaten: string
+  provinsi: string
+}
+
 const MarkerMap = () => {
-  const [geolocation, setGeolocation] = useState<any>([])
+  const [geolocation, setGeolocation] = useState<Marker[]>([])
   const [loading, setLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
@@ -29,18 +38,18 @@ const MarkerMap = () => {
     fetchData()
   }, [fetchData])
 
-  const deleteMarkerPosition = async (index: any, e: any) => {
+  const deleteMarkerPosition = async (index: number) => {
     const updatedLocationData = [...geolocation]
     const id = updatedLocationData[index].id
-    const payload: any = {
-      id,
-    }
-    await axios.delete("/api/marker", { data: payload })
+    await axios.delete("/api/marker", { data: { id } })
     updatedLocationData.splice(index, 1)
     setGeolocation(updatedLocationData)
   }
 
-  const updateMarkerPosition = async (index: any, newPosition: any) => {
+  const updateMarkerPosition = async (
+    index: number,
+    newPosition: { lat: string; lng: string }
+  ) => {
     try {
       const response = await axios.get(
         `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${newPosition.lat}&longitude=${newPosition.lng}&localityLanguage=en`
@@ -100,7 +109,7 @@ const MarkerMap = () => {
         <h1>Loading...</h1>
       ) : (
         <MarkerMuster>
-          {geolocation.map((coordinata: any, index: number) => {
+          {geolocation.map((coordinata: Marker, index: number) => {
             return (
               <Marker
                 key={index}
@@ -110,7 +119,7 @@ const MarkerMap = () => {
                 eventHandlers={{
                   dragend: (e) =>
                     updateMarkerPosition(index, e.target.getLatLng()),
-                  contextmenu: (e) => deleteMarkerPosition(index, e),
+                  contextmenu: (e) => deleteMarkerPosition(index),
                 }}
               >
                 <Popup>

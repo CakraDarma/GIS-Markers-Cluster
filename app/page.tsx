@@ -7,6 +7,12 @@ export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
+        <a
+          className="text-blue-500 underline"
+          href="https://gis-markers-cluster.vercel.app/"
+        >
+          Link 2: CRUD Using Database
+        </a>
         <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]">
           Multiple Markers
         </h1>

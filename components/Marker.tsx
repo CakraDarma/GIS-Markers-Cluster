@@ -90,15 +90,16 @@ const MarkerMap = () => {
         const kecamatan = response.data.locality
         const kabupaten = response.data.city
         const provinsi = response.data.principalSubdivision
-        const locationData = {
+        let locationData = {
           lat,
           lng,
           kecamatan,
           kabupaten,
           provinsi,
         }
-        await axios.post("/api/marker", locationData)
-        fetchData()
+        const responseLocation = await axios.post("/api/marker", locationData)
+
+        setGeolocation([...geolocation, responseLocation.data])
       }
     },
   })

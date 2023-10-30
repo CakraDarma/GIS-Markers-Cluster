@@ -100,6 +100,7 @@ const MarkerMap = () => {
         const responseLocation = await axios.post("/api/marker", locationData)
 
         setGeolocation([...geolocation, responseLocation.data])
+        console.log(geolocation)
       }
     },
   })

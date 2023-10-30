@@ -18,3 +18,8 @@ model marker {
   kabupaten String
   provinsi  String
 }
+
+model polyline {
+  id       String @id @default(cuid())
+  position String @db.Text
+}

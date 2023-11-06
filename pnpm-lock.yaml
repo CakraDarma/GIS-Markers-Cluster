@@ -51,6 +51,7 @@ specifiers:
   leaflet: ^1.9.4
   next: 13.4.13-canary.13
   next-themes: ^0.2.1
+  polyline-encoded: ^0.0.9
   postcss: ^8.4.27
   prettier: ^2.8.8
   prisma: ^5.4.1
@@ -107,6 +108,7 @@ dependencies:
   leaflet: 1.9.4
   next: 13.4.13-canary.13_pamseawcqpaoyqfggclsvtomea
   next-themes: 0.2.1_j5qsxibxhxmfw5hapa2denm3ze
+  polyline-encoded: 0.0.9
   prisma: 5.4.1
   react: 18.2.0
   react-day-picker: 8.8.2_kzhlcyde2l6xjiirkbg7jzhosa
@@ -4105,6 +4107,10 @@ packages:
   /pirates/4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  /polyline-encoded/0.0.9:
+    resolution: {integrity: sha512-xv6ONShzZdcISK6IT8x3IqsqxPq7HRqcPJ80V4et4hMolIRct5s/5dtUkfO7hGZEeKtWZ1fK7/fKur8gbd4fvg==}
+    dev: false
 
   /postcss-import/15.1.0_postcss@8.4.30:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}

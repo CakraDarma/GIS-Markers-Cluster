@@ -38,13 +38,13 @@ const Routing = () => {
             },
           ],
         },
-        routeWhileDragging: true,
+        routeWhileDragging: false,
         // @ts-ignore
         geocoder: L.Control.Geocoder.nominatim(),
         addWaypoints: false,
         draggableWaypoints: true,
-        fitSelectedRoutes: true,
-        showAlternatives: true,
+        fitSelectedRoutes: false,
+        showAlternatives: false,
       })
         .on("routesfound", function (e) {
           e.routes[0].coordinates.forEach(

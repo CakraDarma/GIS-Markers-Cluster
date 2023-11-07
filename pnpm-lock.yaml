@@ -49,6 +49,8 @@ specifiers:
   eslint-plugin-react: ^7.33.1
   eslint-plugin-tailwindcss: ^3.13.0
   leaflet: ^1.9.4
+  leaflet-control-geocoder: ^2.4.0
+  leaflet-routing-machine: ^3.2.12
   next: 13.4.13-canary.13
   next-themes: ^0.2.1
   polyline-encoded: ^0.0.9
@@ -106,6 +108,8 @@ dependencies:
   cmdk: 0.2.0_7xd7ir5nhcoi7hkxcipzh5svmq
   date-fns: 2.30.0
   leaflet: 1.9.4
+  leaflet-control-geocoder: 2.4.0_leaflet@1.9.4
+  leaflet-routing-machine: 3.2.12
   next: 13.4.13-canary.13_pamseawcqpaoyqfggclsvtomea
   next-themes: 0.2.1_j5qsxibxhxmfw5hapa2denm3ze
   polyline-encoded: 0.0.9
@@ -473,6 +477,15 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@mapbox/corslite/0.0.7:
+    resolution: {integrity: sha512-w/uS474VFjmqQ7fFWIMZINQM1BAQxDLuoJaZZIPES1BmeYpCtlh9MtbFxKGGDAsfvut8/HircIsVvEYRjQ+iMg==}
+    dev: false
+
+  /@mapbox/polyline/0.2.0:
+    resolution: {integrity: sha512-GCddO0iw6AzOQqZgBmjEQI9Pgo40/yRgkTkikGctE01kNBN0ThWYuAnTD+hRWrAWMV6QJ0rNm4m8DAsaAXE7Pg==}
+    hasBin: true
+    dev: false
 
   /@next/env/13.4.13-canary.13:
     resolution: {integrity: sha512-UtEqE/++uzFmJZoZ+FxOALu3opBDIt1KYYn+c1ldpBb+0LAldXhVbjdgFjQMmAXglqFMTIo0Ol+KIX7CoaWATA==}
@@ -3750,8 +3763,26 @@ packages:
       language-subtag-registry: 0.3.22
     dev: true
 
+  /leaflet-control-geocoder/2.4.0_leaflet@1.9.4:
+    resolution: {integrity: sha512-b2QlxuFd40uIDbnoUI3U9fzfnB4yKUYlmsXjquJ2d2YjoJqnyVYcIJeErAVv3kPvX3nI0gzvBq1XHMgSVFrGkQ==}
+    peerDependencies:
+      leaflet: ^1.6.0
+    dependencies:
+      leaflet: 1.9.4
+    optionalDependencies:
+      open-location-code: 1.0.3
+    dev: false
+
   /leaflet-draw/1.0.4:
     resolution: {integrity: sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==}
+    dev: false
+
+  /leaflet-routing-machine/3.2.12:
+    resolution: {integrity: sha512-HLde58G1YtD9xSIzZavJ6BPABZaV1hHeGst8ouhzuxmSC3s32NVtADT+njbIUMW1maHRCrsgTk/E4hz5QH7FrA==}
+    dependencies:
+      '@mapbox/corslite': 0.0.7
+      '@mapbox/polyline': 0.2.0
+      osrm-text-instructions: 0.13.4
     dev: false
 
   /leaflet.markercluster/1.5.3_leaflet@1.9.4:
@@ -4038,6 +4069,12 @@ packages:
     dependencies:
       wrappy: 1.0.2
 
+  /open-location-code/1.0.3:
+    resolution: {integrity: sha512-DBm14BSn40Ee241n80zIFXIT6+y8Tb0I+jTdosLJ8Sidvr2qONvymwqymVbHV2nS+1gkDZ5eTNpnOIVV0Kn2fw==}
+    requiresBuild: true
+    dev: false
+    optional: true
+
   /optionator/0.9.3:
     resolution: {integrity: sha512-JjCoypp+jKn1ttEFExxhetCKeJt9zhAgAve5FXHixTvFDW/5aEktX9bufBKLRRMdU7bNtpLfcGu94B3cdEJgjg==}
     engines: {node: '>= 0.8.0'}
@@ -4049,6 +4086,10 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
     dev: true
+
+  /osrm-text-instructions/0.13.4:
+    resolution: {integrity: sha512-ge4ZTIetMQKAHKq2MwWf83ntzdJN20ndRKRaVNoZ3SkDkBNO99Qddz7r6+hrVx38I+ih6Rk5T1yslczAB6Q9Pg==}
+    dev: false
 
   /p-limit/3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
